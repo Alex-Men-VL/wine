@@ -10,15 +10,13 @@ excel_data_df = pandas.read_excel(
 
 drinks = excel_data_df.to_dict('records')
 
-categories = set(excel_data_df['Категория'].tolist())
-
-# list_of_drinks = {}
-# for category in categories:
-# 	list_of_drinks[category] = [drink for drink in drinks if drink['Категория'] == category]
-
 list_of_drinks = collections.defaultdict(list)
 
 for drink  in drinks:
 	list_of_drinks[drink['Категория']].append(drink)
 
+for category in sorted(list_of_drinks):
+	print('\t', category)
+	for drink in list_of_drinks[category]:
+		print(drink)
 pprint(list_of_drinks)
