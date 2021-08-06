@@ -19,7 +19,7 @@ env = Environment(
 template = env.get_template('template.html')
 
 excel_data_df = pandas.read_excel(
-    'wine2.xlsx', na_values=' ', keep_default_na=False)
+    'wine3.xlsx', na_values=' ', keep_default_na=False)
 drinks = excel_data_df.to_dict('records')
 
 # list_of_drinks = collections.defaultdict(list)
