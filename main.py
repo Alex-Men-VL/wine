@@ -22,16 +22,17 @@ excel_data_df = pandas.read_excel(
     'wine3.xlsx', na_values=' ', keep_default_na=False)
 drinks = excel_data_df.to_dict('records')
 
-categories = list(set(excel_data_df['Категория'].tolist()))
-categories.sort()
+list_of_drinks = collections.defaultdict(list)
 
-list_of_drinks = {}
-for category in categories:
-	list_of_drinks[category] = [drink for drink in drinks if drink['Категория'] == category]
+for drink in drinks:
+	list_of_drinks[drink['Категория']].append(drink)
+
+sorted_list_of_drinks = collections.OrderedDict(sorted(list_of_drinks.items()))
+
 
 rendered_page = template.render(
     winery_age = datetime.now().year - 1920,
-   	list_of_drinks=list_of_drinks,
+   	list_of_drinks=sorted_list_of_drinks,
 )
 
 with open('index.html', 'w', encoding="utf8") as file:
