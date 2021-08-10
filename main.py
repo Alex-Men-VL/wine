@@ -15,11 +15,6 @@ def dir_path(path):
         raise FileNotFoundError(path)
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--path", type=dir_path,
-                    help='paste path to file', default='wine3.xlsx')
-args = parser.parse_args()
-
 env = Environment(
     loader=FileSystemLoader('.'),  
     autoescape=select_autoescape(['html', 'xml'])
@@ -27,21 +22,27 @@ env = Environment(
 
 template = env.get_template('template.html')
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--path", type=dir_path,
+                    help='paste path to file', default='wine3.xlsx')
+args = parser.parse_args()
+
 excel_data_df = pandas.read_excel(
     args.path, na_values=' ', keep_default_na=False)
 drinks = excel_data_df.to_dict('records')
 
-list_of_drinks = collections.defaultdict(list)
+drinks_by_category = collections.defaultdict(list)
 
 for drink in drinks:
-	list_of_drinks[drink['Категория']].append(drink)
+	drinks_by_category[drink['Категория']].append(drink)
 
-sorted_list_of_drinks = collections.OrderedDict(sorted(list_of_drinks.items()))
+drinks_by_category = collections.OrderedDict(
+    sorted(drinks_by_category.items()))
 
 
 rendered_page = template.render(
-    winery_age = datetime.now().year - 1920,
-   	list_of_drinks=sorted_list_of_drinks,
+    winery_age=datetime.now().year - 1920,
+   	list_of_drinks=drinks_by_category,
 )
 
 with open('index.html', 'w', encoding="utf8") as file:
