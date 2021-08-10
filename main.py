@@ -6,8 +6,6 @@ from datetime import datetime
 
 import pandas
 
-from pprint import pprint
-
 import collections
 
 
