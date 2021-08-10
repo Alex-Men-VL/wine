@@ -1,13 +1,9 @@
+import collections
+from datetime import datetime
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
-from jinja2 import Environment, FileSystemLoader, select_autoescape
-
-from datetime import datetime
-
 import pandas
-
-import collections
-
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 env = Environment(
     loader=FileSystemLoader('.'),  
