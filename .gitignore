@@ -1,3 +1,10 @@
 env/
 .vscode/
 
+/Jinja2
+.DS_Store
+.replit
+index.html
+*.xlsx
+!wine3.xlsx
+read_excel.py
