@@ -15,39 +15,48 @@ def dir_path(path):
         raise FileNotFoundError(path)
 
 
-env = Environment(
-    loader=FileSystemLoader('.'),  
-    autoescape=select_autoescape(['html', 'xml'])
-)
-
-template = env.get_template('template.html')
-
-parser = argparse.ArgumentParser()
-parser.add_argument("--path", type=dir_path,
-                    help='paste path to file', default='wine3.xlsx')
-args = parser.parse_args()
-
-excel_data_df = pandas.read_excel(
-    args.path, na_values=' ', keep_default_na=False)
-drinks = excel_data_df.to_dict('records')
-
-drinks_by_category = collections.defaultdict(list)
-
-for drink in drinks:
-	drinks_by_category[drink['Категория']].append(drink)
-
-drinks_by_category = collections.OrderedDict(
-    sorted(drinks_by_category.items()))
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--path", type=dir_path,
+                        help='paste path to file', default='wine3.xlsx')
+    return parser.parse_args()
 
 
-rendered_page = template.render(
-    winery_age=datetime.now().year - 1920,
-   	list_of_drinks=drinks_by_category,
-)
-
-with open('index.html', 'w', encoding="utf8") as file:
-    file.write(rendered_page)
+def read_excel():
+    path_to_excel = parse_arguments().path
+    excel_data_df = pandas.read_excel(
+        path_to_excel, na_values=' ', keep_default_na=False)
+    return excel_data_df.to_dict('records')
 
 
-server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
-server.serve_forever()
+def main():
+    env = Environment(
+        loader=FileSystemLoader('.'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+
+    template = env.get_template('template.html')
+
+    drinks = read_excel()
+    drinks_by_category = collections.defaultdict(list)
+
+    for drink in drinks:
+        drinks_by_category[drink['Категория']].append(drink)
+
+    drinks_by_category = collections.OrderedDict(
+        sorted(drinks_by_category.items()))
+
+    rendered_page = template.render(
+        winery_age=datetime.now().year - 1920,
+        list_of_drinks=drinks_by_category,
+    )
+
+    with open('index.html', 'w', encoding="utf8") as file:
+        file.write(rendered_page)
+
+    server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
+    server.serve_forever()
+
+
+if __name__ == '__main__':
+    main()
