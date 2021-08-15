@@ -15,8 +15,7 @@ def parse_arguments():
     return parser.parse_args()
 
 
-def read_excel():
-    path_to_excel = parse_arguments().path
+def read_excel(path_to_excel):
     excel_data_df = pandas.read_excel(
         path_to_excel, na_values=' ', keep_default_na=False)
     return excel_data_df.to_dict('records')
@@ -30,7 +29,9 @@ def main():
 
     template = env.get_template('template.html')
 
-    drinks = read_excel()
+    path_to_excel = parse_arguments().path
+    drinks = read_excel(path_to_excel)
+
     drinks_by_category = collections.defaultdict(list)
 
     for drink in drinks:
