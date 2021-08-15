@@ -41,7 +41,7 @@ def main():
 
     rendered_page = template.render(
         winery_age=datetime.now().year - 1920,
-        list_of_drinks=drinks_by_category,
+        drinks_by_category=drinks_by_category,
     )
 
     with open('index.html', 'w', encoding="utf8") as file:
