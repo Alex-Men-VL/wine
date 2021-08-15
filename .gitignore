@@ -6,7 +6,7 @@ env/
 .replit
 index.html
 *.xlsx
-!wine3.xlsx
+!wine_example.xlsx
 read_excel.py
 img.png
 .~lock.wine3.xlsx#
