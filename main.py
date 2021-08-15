@@ -8,16 +8,9 @@ import pandas
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 
-def dir_path(path):
-    if os.path.exists(path):
-        return path
-    else:
-        raise FileNotFoundError(path)
-
-
 def parse_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--path", type=dir_path,
+    parser.add_argument("--path",
                         help='paste path to file', default='wine3.xlsx')
     return parser.parse_args()
 
