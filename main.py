@@ -11,7 +11,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("--path",
-                        help='paste path to file', default='wine3.xlsx')
+                        help='paste path to file', default='wine_example.xlsx')
     return parser.parse_args()
 
 
