@@ -1,6 +1,5 @@
 import argparse
 import collections
-import os
 from datetime import datetime
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
